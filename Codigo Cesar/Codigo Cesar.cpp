@@ -1,6 +1,6 @@
 #include <iostream>
-#include <ctype.h>  // isalpha, isupper
-#include <string.h> // strcspn
+#include <ctype.h>
+#include <string.h>
 
 using namespace std;
 
@@ -8,26 +8,74 @@ using namespace std;
 #define INICIO_ALFABETO_MAYUSCULAS 65
 #define INICIO_ALFABETO_MINUSCULAS 97
 #define MAXIMA_LONGITUD_CADENA 5000
-#define MOD(i, n) (i % n + n) % n
 
-const char* alfabetoMinusculas = "abcdefghijklmnopqrstuvwxyz",
-          * alfabetoMayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+class CifradoCesar {
+private:
+    const char* alfabetoMinusculas = "abcdefghijklmnopqrstuvwxyz";
+    const char* alfabetoMayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+public:
+    CifradoCesar();
+    ~CifradoCesar();
 
-void cifrar(char* mensaje, char* destino, int rotaciones);
-int ord(char c);
+    char* cifrar(char*, int);
+    int enteroACaracter(char);
+};
+
+CifradoCesar::CifradoCesar() {
+
+}
+
+CifradoCesar::~CifradoCesar() {}
+
+char* CifradoCesar::cifrar(char* mensaje, int rotaciones) {
+    char* destino = new char[strlen(mensaje)];
+
+    int i = 0;
+    while (mensaje[i]) {
+        char caracterActual = mensaje[i];
+        int posicionOriginal = enteroACaracter(caracterActual);
+
+        if (!isalpha(caracterActual)) {
+            destino[i] = caracterActual;
+
+            i++;
+            continue;
+        }
+        if (isupper(caracterActual)) {
+            destino[i] = alfabetoMayusculas[(posicionOriginal - INICIO_ALFABETO_MAYUSCULAS + rotaciones) % LONGITUD_ALFABETO];
+        }
+        else {
+            destino[i] = alfabetoMinusculas[(posicionOriginal - INICIO_ALFABETO_MINUSCULAS + rotaciones) % LONGITUD_ALFABETO];
+        }
+        i++;
+    }
+
+    destino[strlen(mensaje)] = '\0';
+    return destino;
+}
+
+int CifradoCesar::enteroACaracter(char c) {
+    return (int)c;
+}
+
 
 int main()
 {
-    char mensaje[] = "retirada";
-    char destino[200] = "";
-    cifrar(mensaje, destino, 3);
-    cout << destino << endl;
+    char mensaje[MAXIMA_LONGITUD_CADENA];
+    char* mensajeFinal;
+
+    CifradoCesar objCifrado = CifradoCesar();
+
+    cin.getline(mensaje, MAXIMA_LONGITUD_CADENA);
+    mensajeFinal = objCifrado.cifrar(mensaje, 3);
+    cout << mensajeFinal << endl;
 
 
     return 0;
 }
 
-void cifrar(char* mensaje, char* destino, int rotaciones) {
+void descifrar(char* mensaje, char* destino, int rotaciones) {
+    /*Recorrer cadena*/
     int i = 0;
     while (mensaje[i]) {
         char caracterActual = mensaje[i];
@@ -38,20 +86,15 @@ void cifrar(char* mensaje, char* destino, int rotaciones) {
             continue; // Ir a la siguiente iteración; por eso arriba aumentamos a i
         }
         if (isupper(caracterActual)) {
-            destino[i] =
-                alfabetoMayusculas[(posicionOriginal - INICIO_ALFABETO_MAYUSCULAS +
-                    rotaciones) %
-                LONGITUD_ALFABETO];
+            destino[i] = alfabetoMayusculas[MOD(
+                posicionOriginal - INICIO_ALFABETO_MAYUSCULAS - rotaciones,
+                LONGITUD_ALFABETO)];
         }
         else {
-
-            destino[i] =
-                alfabetoMinusculas[(posicionOriginal - INICIO_ALFABETO_MINUSCULAS +
-                    rotaciones) %
-                LONGITUD_ALFABETO];
+            destino[i] = alfabetoMinusculas[MOD(
+                posicionOriginal - INICIO_ALFABETO_MINUSCULAS - rotaciones,
+                LONGITUD_ALFABETO)];
         }
         i++;
     }
 }
-
-int ord(char c) { return (int)c; }

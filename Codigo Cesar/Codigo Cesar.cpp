@@ -96,8 +96,10 @@ int CifradoCesar::enteroACaracter(char c) {
 int main()
 {
     CifradoCesar objCifrado = CifradoCesar();
+    bool r = true;
 
     int rotaciones;
+    int opc;
     char mensaje[MAXIMA_LONGITUD_CADENA];
     char* mensajeCifrado;
     char* mensajeDesifrado;
@@ -108,16 +110,47 @@ int main()
     cout << "Ingrese una cantidad de rotaciones: ";
     cin >> rotaciones;
 
+    system("pause");
+    system("cls");
+
     mensajeCifrado = objCifrado.cifrar(mensaje, rotaciones);
     mensajeDesifrado = objCifrado.descifrar(mensajeCifrado, rotaciones);
 
-    cout << "\nMensaje cifrado: " << mensajeCifrado << endl;
-    cout << "Mensaje desifrado: " << mensajeDesifrado << endl;
+    do {
+        cout << "1) Cifrar un mensaje" << endl;
+        cout << "2) Desifrar un mensaje" << endl;
+        cout << "3) Fuerza bruta" << endl;
+        cout << "4) Salir" << endl;
 
-    cout << "\nMetodo de fuerza bruta -------" << endl;
-    for (int i = 1; i <= LONGITUD_ALFABETO; i++) {
-        cout << "Rotacion " << i << ": " << objCifrado.fuerzaBruta(mensajeCifrado, i) << endl;
-    }
+        cout << "\nDijite una opcion: ";
+        cin >> opc;
+
+        switch (opc) {
+        case 1:
+            cout << "\nMensaje cifrado: " << mensajeCifrado << endl;
+
+            system("pause");
+            system("cls");
+            break;
+        case 2:
+            cout << "Mensaje desifrado: " << mensajeDesifrado << endl;
+
+            system("pause");
+            system("cls");
+            break;
+        case 3:
+            cout << "\nMetodo de fuerza bruta -------" << endl;
+            for (int i = 1; i <= LONGITUD_ALFABETO; i++) 
+                cout << "Rotacion " << i << ": " << objCifrado.fuerzaBruta(mensajeCifrado, i) << endl;
+
+            system("pause");
+            system("cls");
+            break;
+        case 4:
+            r = false;
+            break;
+        }
+    } while (r);
 
     return 0;
 }

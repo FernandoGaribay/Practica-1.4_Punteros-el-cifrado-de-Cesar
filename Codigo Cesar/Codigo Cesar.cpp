@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctype.h>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
@@ -8,6 +8,7 @@ using namespace std;
 #define INICIO_ALFABETO_MAYUSCULAS 65
 #define INICIO_ALFABETO_MINUSCULAS 97
 #define MAXIMA_LONGITUD_CADENA 5000
+#define MOD(i, n) (i % n + n) % n
 
 class CifradoCesar {
 private:
@@ -18,6 +19,8 @@ public:
     ~CifradoCesar();
 
     char* cifrar(char*, int);
+    char* descifrar(char*, int);
+    char** fuerzaBruta(char*);
     int enteroACaracter(char);
 };
 
@@ -49,37 +52,17 @@ char* CifradoCesar::cifrar(char* mensaje, int rotaciones) {
         }
         i++;
     }
-
     destino[strlen(mensaje)] = '\0';
     return destino;
 }
 
-int CifradoCesar::enteroACaracter(char c) {
-    return (int)c;
-}
+char* CifradoCesar::descifrar(char* mensaje, int rotaciones) {
+    char* destino = new char[strlen(mensaje)];
 
-
-int main()
-{
-    char mensaje[MAXIMA_LONGITUD_CADENA];
-    char* mensajeFinal;
-
-    CifradoCesar objCifrado = CifradoCesar();
-
-    cin.getline(mensaje, MAXIMA_LONGITUD_CADENA);
-    mensajeFinal = objCifrado.cifrar(mensaje, 3);
-    cout << mensajeFinal << endl;
-
-
-    return 0;
-}
-
-void descifrar(char* mensaje, char* destino, int rotaciones) {
-    /*Recorrer cadena*/
     int i = 0;
     while (mensaje[i]) {
         char caracterActual = mensaje[i];
-        int posicionOriginal = ord(caracterActual);
+        int posicionOriginal = enteroACaracter(caracterActual);
         if (!isalpha(caracterActual)) {
             destino[i] = caracterActual;
             i++;
@@ -97,4 +80,45 @@ void descifrar(char* mensaje, char* destino, int rotaciones) {
         }
         i++;
     }
+    destino[strlen(mensaje)] = '\0';
+    return destino;
+}
+
+char** CifradoCesar::fuerzaBruta(char* mensaje) {
+    char* destino[27];
+
+    for (int i = 1; i < 27; i++) {
+        destino[i] = descifrar(mensaje, i);
+    }
+
+    return destino;
+}
+
+int CifradoCesar::enteroACaracter(char c) {
+    return (int)c;
+}
+
+
+int main()
+{
+    char mensaje[MAXIMA_LONGITUD_CADENA];
+    char* mensajeCifrado;
+    char* mensajeDesifrado;
+
+    CifradoCesar objCifrado = CifradoCesar();
+
+    cin.getline(mensaje, MAXIMA_LONGITUD_CADENA);
+
+    mensajeCifrado = objCifrado.cifrar(mensaje, 3);
+    mensajeDesifrado = objCifrado.descifrar(mensajeCifrado, 3);
+
+    cout << mensajeCifrado << endl;
+    cout << mensajeDesifrado << endl;
+
+    char** destino;
+    destino = objCifrado.fuerzaBruta(mensajeCifrado);
+
+    cout << destino[0][0] << endl;
+
+    return 0;
 }

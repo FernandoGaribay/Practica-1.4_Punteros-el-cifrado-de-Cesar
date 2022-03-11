@@ -1,9 +1,9 @@
 #include <iostream>
 #include <ctype.h>
-#include <string>
 
 using namespace std;
 
+// Definiciones para facilitar las constantes
 #define LONGITUD_ALFABETO 26
 #define INICIO_ALFABETO_MAYUSCULAS 65
 #define INICIO_ALFABETO_MINUSCULAS 97
